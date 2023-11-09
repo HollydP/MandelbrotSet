@@ -1,26 +1,12 @@
-# Estimates area of the mandelbrot set using latin hypercube sampling
-
 import numpy as np
 from numpy import ndarray
-import matplotlib.pyplot as plt 
 import random 
-
-# ESTIMATING AREA VIA MONTE CARLO INTEGRATION WITH HYPERCUBE SAMPLING
-
-# generate complex numbers from x and y coordinates via 2-D hypercube sampling 
-#   - generate a [i x j] image/array of complex numbers between -2 - i and 1 + i (x coords between -2 and 1, y coords between -1 an 1)
-#   - divide x_coords and y_coords into ... sections
-#   - select a random x and y point in each of the sections
-#   - pair up the selected x and y points randomly to create a set of complex numbers
-# calculate the area of the set using these points using monte carlo 
-#    - A_(i,s) = (points in set)/(total_points) * A_of_entire_grid 
-# compare results and find convergence speed to the exact area
 
 MAX_ITERS = 1000
 
 class HypercubeSampling:
     """
-    Samples complex numbers via Latin Hypercube Sampling in order to
+    Samples complex numbers via Latin Hypercube Sampling, in order to
     estimate area of the Mandelbrot Set.
     """
 
@@ -45,7 +31,7 @@ class HypercubeSampling:
         """
         Generate a list of complex numbers via hypercube sampling.
         """
-        # randomly pair up the x- and y-samples 
+        # randomly pair up the x- and y-coords 
         self.x_samples = random.sample(self.x_points, k=self.samples)
         self.y_samples = random.sample(self.y_points, k=self.samples)
         paired_points = list(zip(self.x_samples, self.y_samples))
@@ -82,17 +68,10 @@ class HypercubeSampling:
         areas_found = [self.estimate_area(self.create_samples()) for _ in range(iterations)]
         return np.mean(areas_found)
     
-    def simulate(self, simulations: int = 50) -> float:
+    def simulate(self, simulations: int = 50, iterations: int = 20) -> float:
         """
         Returns mean area after N simulations
         """
-        areas_found = [self.iterate() for _ in range(simulations)]
+        areas_found = [self.iterate(iterations) for _ in range(simulations)]
         return np.mean(areas_found), areas_found
     
-LHS = HypercubeSampling()
-mean_area, areas_found = LHS.simulate()
-print(mean_area)
-
-cumulative_mean_progression = np.cumsum(areas_found) / (np.arange(len(areas_found)) + 1)
-plt.plot(range(len(areas_found)), cumulative_mean_progression)
-plt.show()
