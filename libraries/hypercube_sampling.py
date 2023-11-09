@@ -3,6 +3,7 @@
 import numpy as np
 from numpy import ndarray
 import matplotlib.pyplot as plt 
+import random 
 
 # ESTIMATING AREA VIA MONTE CARLO INTEGRATION WITH HYPERCUBE SAMPLING
 
@@ -23,58 +24,31 @@ class HypercubeSampling:
     estimate area of the Mandelbrot Set.
     """
 
-    def __init__(self, intervals=500, HEIGHT=10000) -> None:
+    def __init__(self, samples=500) -> None:
         """
         (int) x_min, x_max, y_min, y_max - boundaries of the generated grid
         (float) total_area               - area of the entire grid
-        (int) width                      - width of the grid in number of points
-        (int) height                     - height of the grid in number of points
-        (int) intervals                  - #samples generated / #sections x and y samples are drawn from
+        (int) samples                    - #samples generated, must be even
         (1D-array) x_points              - points on the x axis
         (1D-array) y_points              - points on the y-axis
-        (2D-array) x_intervals           - points on x-axis divided into intervals
-        (2D-array) y-intervals           - points on y-axis divided into intervals
         """
-        x_min, x_max = (-2, 1)
-        y_min, y_max = (-1, 1)
-        self.total_area = abs(x_min - x_max) * abs(y_min - y_max)
+        self.x_min, self.x_max = (-2, 1)
+        self.y_min, self.y_max = (-1, 1)
+        self.total_area = abs(self.x_min - self.x_max) * abs(self.y_min - self.y_max)
 
-        WIDTH = int(HEIGHT * (3/2))
-        self.intervals = intervals
+        self.samples = samples
 
-        self.x_points = np.linspace(x_min, x_max, WIDTH)
-        self.y_points = np.linspace(y_min, y_max, HEIGHT)
-        self.x_intervals, self.y_intervals = self.divide_into_intervals()
-    
-    def divide_into_intervals(self) -> (ndarray, ndarray):
-        """
-        Returns x- and y-axis divided into intervals.
-        """
-        x_intervals = self.x_points.reshape(self.intervals, -1)
-        y_intervals = self.y_points.reshape(self.intervals, -1)
-        return x_intervals, y_intervals
-    
-    def sample_intervals(self, interval_array) -> ndarray[float]:
-        """
-        Samples one random point from each interval.
-        """
-        points_per_interval = interval_array.shape[1]
-        random_indices = np.random.choice(np.arange(points_per_interval), size=self.intervals)
-        sampled_points = interval_array[np.arange(self.intervals), random_indices]
-        return sampled_points
+        self.x_points = list(np.linspace(self.x_min, self.x_max, samples))
+        self.y_points = list(np.linspace(self.y_min, self.y_max, samples))
 
     def create_samples(self) -> ndarray[complex]:
         """
         Generate a list of complex numbers via hypercube sampling.
         """
-        # select random x_point and y_points from every interval
-        x_samples = self.sample_intervals(self.x_intervals)
-        y_samples = self.sample_intervals(self.y_intervals)
-
         # randomly pair up the x- and y-samples 
-        np.random.shuffle(x_samples)
-        np.random.shuffle(y_samples)
-        paired_points = list(zip(x_samples, y_samples))
+        self.x_samples = random.sample(self.x_points, k=self.samples)
+        self.y_samples = random.sample(self.y_points, k=self.samples)
+        paired_points = list(zip(self.x_samples, self.y_samples))
 
         # generate complex numbers from randomly paired points
         complex_numbers = np.array([complex(a,b) for a, b in paired_points])
@@ -115,7 +89,7 @@ class HypercubeSampling:
         areas_found = [self.iterate() for _ in range(simulations)]
         return np.mean(areas_found), areas_found
     
-LHS = HypercubeSampling(intervals = 500, HEIGHT=10000)
+LHS = HypercubeSampling()
 mean_area, areas_found = LHS.simulate()
 print(mean_area)
 
