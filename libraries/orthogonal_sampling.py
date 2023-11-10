@@ -1,6 +1,7 @@
 import numpy as np
 from numpy import ndarray
 import random 
+import pandas as pd
 
 MAX_ITERS = 1000
 
@@ -10,7 +11,7 @@ class OrthogonalSampling:
     estimate area of the Mandelbrot Set.
     """
 
-    def __init__(self, samples=1000) -> None:
+    def __init__(self, samples=1000, iterations = 500,simulations = 100) -> None:
         """
         (int) x_min, x_max, y_min, y_max - boundaries of the generated grid
         (float) total_area               - area of the entire grid
@@ -26,6 +27,8 @@ class OrthogonalSampling:
         self.total_area = abs(self.x_min - self.x_max) * abs(self.y_min - self.y_max)
 
         self.samples = samples
+        self.max_iters = iterations
+        self.simulations= simulations
 
     def create_samples(self) -> ndarray[complex]:
         """
@@ -72,11 +75,42 @@ class OrthogonalSampling:
         y_pos = self.y_min +  np.array(selected_col)*dy
 
         # randomize to a point within cell
-        random_x_pos =  x_pos + np.random.uniform(-1,1,subspaces)*dx/2
-        random_y_pos = y_pos  + np.random.uniform(-1,1,subspaces)*dy/2
+        random_x_pos =  x_pos + np.random.uniform(-1,1,self.samples)*dx/2
+        random_y_pos = y_pos  + np.random.uniform(-1,1,self.samples)*dy/2
 
         paired_points = list(zip(random_x_pos,random_y_pos))
 
         complex_numbers = np.array([complex(a,b) for a, b in paired_points])
 
         return complex_numbers
+    
+    def in_mandelbrot_set(self, c: complex) -> bool: 
+        """
+        Returns true if complex number c in Mandelbrot set, else False.
+        If z not diverged after MAX_ITERS, point lies in the set.
+        """
+        z = 0 
+        iters = 0
+        while iters < self.max_iters and abs(z) <= 2:
+            z = z**2 + c 
+            iters += 1
+        return iters == self.max_iters
+
+    def estimate_area(self, point_set: ndarray[complex]) -> float:
+        """
+        Estimates area of Mandelbrot set via Monte Carlo integration method.
+        """
+        boolean_arr = [self.in_mandelbrot_set(c) for c in point_set]
+        points_in_set = np.sum(boolean_arr)
+        return self.total_area * points_in_set / len(point_set)
+
+    def simulate(self) -> float:
+        """
+        Returns mean area after N iterations.
+        """
+        areas_found = [self.estimate_area(self.create_samples()) for _ in range(self.simulations)]
+        areas_df = pd.DataFrame(areas_found,columns=["Area"])
+        areas_df.to_csv("Mandlebrot Area Simulations for s{} i{}.csv".format(self.simulations,self.max_iters),index=False)
+
+        return np.mean(areas_found), areas_found
+    
