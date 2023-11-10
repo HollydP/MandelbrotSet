@@ -10,7 +10,7 @@ class Mandelbrot:
     Contains all the required methods needed for calculating
     the Mandelbrot area.
     """
-    def __init__(self, method, samples, iterations, simulations) -> None:
+    def __init__(self, method, samples, iterations, simulations, x_min, x_max, y_min, y_max) -> None:
         """
         (str) method                     - Sampling method
         (int) samples                    - #samples generated, must be sqrtable
@@ -28,8 +28,8 @@ class Mandelbrot:
         self.max_iters = iterations
         self.simulations= simulations
 
-        self.x_min, self.x_max = (-2, 1)
-        self.y_min, self.y_max = (-1, 1)
+        self.x_min, self.x_max = (x_min, x_max)
+        self.y_min, self.y_max = (y_min, y_max)
         self.total_area = abs(self.x_min - self.x_max) * abs(self.y_min - self.y_max)
 
     def in_mandelbrot_set(self, c: complex) -> bool: 

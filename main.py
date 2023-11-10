@@ -11,22 +11,31 @@ from libraries.methods import Mandelbrot, Sampling
 # from libraries.hypercube_sampling import HypercubeSampling
 # from libraries.orthogonal_sampling import OrthogonalSampling
 
-def main(method, samples, iterations, simulations, plot):
+def main(method, samples, iterations, simulations, symmetry, plot):
     # random.seed(0)
 
-        Mandelbrot_Functions = Mandelbrot(method, samples, iterations, simulations)
-        mean_area, areas_found = Mandelbrot_Functions.simulate()
-        print("Area found using {} sampling: {}".format(method,mean_area))
+    # Variance Reduction Technique - Reducing the area - Utilizes the fact the Mandlebrot is symmetric about the x axis
+    # For the same number of simulations we should see a better convergence
+    if symmetry == True:
+        x_min, x_max = (-2, 1)
+        y_min, y_max = (0, 1)
+    else:
+        x_min, x_max = (-2, 1)
+        y_min, y_max = (-1, 1)
 
-        if plot:
-            cumulative_mean_progression = np.cumsum(areas_found) / (np.arange(len(areas_found)) + 1)
-            plt.plot(range(len(areas_found)), cumulative_mean_progression)
-            plt.title("Convergence of estimated area")
-            plt.xlabel("simulations")
-            plt.ylabel("Area")
-            plt.show()
+    Mandelbrot_Functions = Mandelbrot(method, samples, iterations, simulations, x_min, x_max, y_min, y_max)
+    mean_area, areas_found = Mandelbrot_Functions.simulate()
+    print("Area found using {} sampling: {}".format(method,mean_area))
 
-        return
+    if plot:
+        cumulative_mean_progression = np.cumsum(areas_found) / (np.arange(len(areas_found)) + 1)
+        plt.plot(range(len(areas_found)), cumulative_mean_progression)
+        plt.title("Convergence of estimated area")
+        plt.xlabel("simulations")
+        plt.ylabel("Area")
+        plt.show()
+
+    return
 
 # def main(method, samples, iterations, simulations, plot):
 #     # random.seed(0)
@@ -74,10 +83,11 @@ if __name__ == "__main__":
     parser.add_argument("-n", help="number of samples", default=500, type=int)
     parser.add_argument("-i", "--iterations", help="number of iterations", default=10, type=int)
     parser.add_argument("-s", "--simulations", help="number of simulations", default=10, type=int)
+    parser.add_argument("--symmetry", action= "store_true",help="make use of the mandelbrot symmetry")
     parser.add_argument("--plot", action="store_true", help="to show convergence of area in a plot")
 
     # read arguments from command line
     args = parser.parse_args()
 
     # run main with provided arguments
-    main(args.method, args.n, args.iterations, args.simulations, args.plot)
+    main(args.method, args.n, args.iterations, args.simulations, args.symmetry, args.plot)
