@@ -70,7 +70,7 @@ class Mandelbrot:
         # Sampling dict should call the sampling function and output the correct complex numbers based on the method (not sure this works)
         areas_found = [self.estimate_area(self.sampling_func()) for _ in range(self.simulations)]
         areas_df = pd.DataFrame(areas_found,columns=["Area"])
-        areas_df.to_csv(os.path.join("data","Mandlebrot Area Simulations for {} s{} i{}.csv".format(self.method,self.simulations,self.max_iters)),index=False)
+        areas_df.to_csv(os.path.join("data","Mandlebrot Area Simulations for {} n{} s{} i{}.csv".format(self.method,self.samples,self.simulations,self.max_iters)),index=False)
 
         return np.mean(areas_found), areas_found
 
