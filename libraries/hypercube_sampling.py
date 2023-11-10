@@ -41,37 +41,39 @@ class HypercubeSampling:
         
         return complex_numbers
     
-    def in_mandelbrot_set(self, c: complex) -> bool: 
+    def in_mandelbrot_set(self, c: complex, max_iters: int = 1000) -> bool: 
         """
         Returns true if complex number c in Mandelbrot set, else False.
         If z not diverged after MAX_ITERS, point lies in the set.
         """
         z = 0 
         iters = 0
-        while iters < MAX_ITERS and abs(z) <= 2:
+        while iters < max_iters and abs(z) <= 2:
             z = z**2 + c 
             iters += 1
-        return iters == MAX_ITERS
+        return iters == max_iters
 
-    def estimate_area(self, point_set: ndarray[complex]) -> float:
+    def estimate_area(self, point_set: ndarray[complex], max_iters: int = 1000) -> float:
         """
         Estimates area of Mandelbrot set via Monte Carlo integration method.
         """
-        boolean_arr = [self.in_mandelbrot_set(c) for c in point_set]
+        boolean_arr = [self.in_mandelbrot_set(c, max_iters) for c in point_set]
         points_in_set = np.sum(boolean_arr)
         return self.total_area * points_in_set / len(point_set)
 
     def iterate(self, iterations: int = 20) -> float:
         """
-        Returns mean area after N iterations.
+        Returns mean area after N iterations (fixed max_iters and samples).
         """
         areas_found = [self.estimate_area(self.create_samples()) for _ in range(iterations)]
         return np.mean(areas_found)
     
     def simulate(self, simulations: int = 50, iterations: int = 20) -> float:
         """
-        Returns mean area after N simulations
+        Returns mean area after N simulations (fixed max_iters and samples).
         """
         areas_found = [self.iterate(iterations) for _ in range(simulations)]
         return np.mean(areas_found), areas_found
     
+# TODO 
+# Use symmetry in the x-axis for faster computation
