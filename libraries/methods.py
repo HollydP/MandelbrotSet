@@ -175,11 +175,11 @@ class Sampling:
         x_pos = self.x_min + np.array(selected_row)*dx
         y_pos = self.y_min +  np.array(selected_col)*dy
 
-        # randomize to a point within cell
-        random_x_pos =  x_pos + np.random.uniform(-1,1,self.samples)*dx/2
-        random_y_pos = y_pos  + np.random.uniform(-1,1,self.samples)*dy/2
+        # # randomize to a point within cell
+        # random_x_pos =  x_pos + np.random.uniform(-1,1,self.samples)*dx/2
+        # random_y_pos = y_pos  + np.random.uniform(-1,1,self.samples)*dy/2
 
-        paired_points = list(zip(random_x_pos,random_y_pos))
+        paired_points = list(zip(x_pos,y_pos))
 
         complex_numbers = np.array([complex(a,b) for a, b in paired_points])
 
