@@ -6,10 +6,7 @@ import argparse
 import random
 import matplotlib.pyplot as plt
 import numpy as np
-from libraries.methods import Mandelbrot, Sampling
-
-# from libraries.hypercube_sampling import HypercubeSampling
-# from libraries.orthogonal_sampling import OrthogonalSampling
+from libraries.methods import Mandelbrot
 
 def main(method, samples, iterations, simulations, symmetry, plot):
     # random.seed(0)
@@ -23,8 +20,8 @@ def main(method, samples, iterations, simulations, symmetry, plot):
         x_min, x_max = (-2, 1)
         y_min, y_max = (-1, 1)
 
-    Mandelbrot_Functions = Mandelbrot(method, samples, iterations, simulations, x_min, x_max, y_min, y_max)
-    mean_area, areas_found = Mandelbrot_Functions.simulate()
+    Mandelbrot_Functions = Mandelbrot(method, samples, iterations, x_min, x_max, y_min, y_max)
+    mean_area, areas_found = Mandelbrot_Functions.simulate(simulations)
     print("Area found using {} sampling: {}".format(method,mean_area))
 
     if plot:
