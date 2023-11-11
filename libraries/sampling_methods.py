@@ -54,41 +54,61 @@ def orthogonal_sampling(x_range, y_range, samples) -> ndarray[complex]:
 
     # Create subgrids by index
     subspaces = int(np.sqrt(samples))
-    blocks = {(i,j):[(a,b) for a in range(i*subspaces,i*subspaces+subspaces) for b in range(j*subspaces,j*subspaces+subspaces)] 
-            for i in range(subspaces) for j in range(subspaces)}
 
-    # Initilize arrays to keep track of which rows and cells have been selected
-    selected_row=[]
-    selected_col=[]
+    # Initilize list of selected points
+    selected_x=[]
+    selected_y=[]
 
-    # Loop through each subgrid so all subgrids have 1 sample
+    # Loop through each subgrid and randomly choose a location from the remaining cells and columns
     for i in range(subspaces):
         for j in range(subspaces):
-            # print(i,j)
-            n=m=np.nan
-            match = False
 
-            # Randomly select a cell within subgrid
-            while match == False:
-                (n,m) = random.sample(blocks[(i,j)], k=1)[0]
-                # check row and column of cell is different from previously selected cells
-                if n not in selected_row:
-                    if m not in selected_col:
-                        selected_row.append(n)
-                        selected_col.append(m)
-                        match = True
+            options_x = range(i*subspaces,i*subspaces+subspaces)
+            options_x = list(set(options_x).difference(set(selected_x)))
+            selected_x.append(random.sample(options_x, k=1)[0])
 
-    # Convert index to location on the plane
-    # each point describes the centre of a cell
-    x_pos = x_min + np.array(selected_row)*dx
-    y_pos = y_min +  np.array(selected_col)*dy
+            options_y = range(j*subspaces,j*subspaces+subspaces)
+            options_y = list(set(options_y).difference(set(selected_y)))
+            selected_y.append(random.sample(options_y, k=1)[0])
 
-    # # randomize to a point within cell
-    # random_x_pos =  x_pos + np.random.uniform(-1,1,self.samples)*dx/2
-    # random_y_pos = y_pos  + np.random.uniform(-1,1,self.samples)*dy/2
-
+    # change lattice position to location in plane
+    x_pos = x_min + np.array(selected_x)*dx
+    y_pos = y_min +  np.array(selected_y)*dy
     paired_points = list(zip(x_pos,y_pos))
 
     complex_numbers = np.array([complex(a,b) for a, b in paired_points])
 
     return complex_numbers
+
+
+    # blocks = {(i,j):[(a,b) for a in range(i*subspaces,i*subspaces+subspaces) for b in range(j*subspaces,j*subspaces+subspaces)] 
+    #         for i in range(subspaces) for j in range(subspaces)}
+
+    # # Initilize arrays to keep track of which rows and cells have been selected
+    # selected_row=[]
+    # selected_col=[]
+
+    # # Loop through each subgrid so all subgrids have 1 sample
+    # for i in range(subspaces):
+    #     for j in range(subspaces):
+    #         # print(i,j)
+    #         n=m=np.nan
+    #         match = False
+
+    #         # Randomly select a cell within subgrid
+    #         while match == False:
+    #             (n,m) = random.sample(blocks[(i,j)], k=1)[0]
+    #             # check row and column of cell is different from previously selected cells
+    #             if n not in selected_row:
+    #                 if m not in selected_col:
+    #                     selected_row.append(n)
+    #                     selected_col.append(m)
+    #                     match = True
+    #     # Convert index to location on the plane
+    # # each point describes the centre of a cell
+    # x_pos = x_min + np.array(selected_row)*dx
+    # y_pos = y_min +  np.array(selected_col)*dy
+
+    # # # randomize to a point within cell
+    # # random_x_pos =  x_pos + np.random.uniform(-1,1,self.samples)*dx/2
+    # # random_y_pos = y_pos  + np.random.uniform(-1,1,self.samples)*dy/2
