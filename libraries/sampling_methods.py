@@ -13,7 +13,6 @@ def pure_random_sampling(x_range, y_range, samples) -> ndarray[complex]:
 
     # generate complex numbers
     complex_numbers = np.array([complex(a,b) for a, b in paired_points])
-
     return complex_numbers
 
 def latin_hypercube_sampling(x_range: tuple, y_range: tuple, samples: int) -> ndarray[complex]:

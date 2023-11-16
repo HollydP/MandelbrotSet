@@ -61,11 +61,14 @@ class Mandelbrot:
     
     def simulate(self, simulations, save=True) -> float:
         """
-        Returns mean area after N iterations.
+        Returns mean area after N simulation.
         """
+        print(f'Simulating with {self.samples} samples.')
         areas_found = []
+        samples_matrix = []
         for _ in range(simulations):
             samples_drawn = self.sampling_function(self.x_range, self.y_range, self.samples)
+            samples_matrix.append(samples_drawn)
             estimated_area = self.estimate_area(samples_drawn)
             areas_found.append(estimated_area)
 
@@ -73,7 +76,7 @@ class Mandelbrot:
         if save:
             self.save_to_csv(areas_found, simulations)
 
-        return np.mean(areas_found), areas_found
+        return np.mean(areas_found), areas_found, samples_matrix
     
     def save_to_csv(self, areas_found, simulations):
         """
@@ -84,6 +87,40 @@ class Mandelbrot:
             os.path.join("data",f"Mandlebrot Area Simulations for {self.method} n{self.samples} s{simulations} i{self.max_iters}.csv"), 
                 index=False
             )
+        
+    def sample_standard_deviation(self, areas_found: ndarray):
+        """
+        Calculates the sample standard deviation that is used as an estimate for the standard deviation.
+        """
+        mean_area = np.mean(areas_found)
+        squared_std = 0
+        for i in range(1,len(areas_found)):
+            squared_std += (areas_found[i] - mean_area)**2
+
+        return np.sqrt(squared_std / (len(areas_found) - 1))
+    
+    
+    def samples_convergence(self, simulations, area_estimate, area_estimate_std, sample_values: ndarray):
+        """
+        Calculates the absolute error between the area samples and the area estimate.
+        Calculates the standard deviation of the error.
+        """
+        convergence = []
+        confidence_interval = []
+        for i in sample_values:
+            print(f'Samples = {i}')
+            self.samples = i
+            area_sample, area_sample_vector, temp = self.simulate(simulations)
+
+            # Each computer area is compared to the one obtained with the most iterations
+            convergence.append(abs(area_sample - area_estimate))
+
+            area_sample_std = self.sample_standard_deviation(area_sample_vector)
+            std = np.sqrt(area_sample_std**2 + area_estimate_std**2)
+            confidence_interval.append(1.96 * std / np.sqrt(simulations))
+
+        
+        return convergence, confidence_interval
 
 # class Sampling:
 #     """
