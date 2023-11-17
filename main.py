@@ -28,6 +28,8 @@ def main(method, samples, iterations, simulations, symmetry, plot):
     Mandelbrot_Functions = Mandelbrot(method, samples, iterations, x_min, x_max, y_min, y_max)
     area_estimate = 1.5058492800000003
     area_estimate_std = np.sqrt(1.8655279476363516e-05)
+    simulation_number_area_estimate = 100
+
 
     print(f'Area estimate = {area_estimate} | with method = {method}')
 
@@ -72,8 +74,8 @@ def main(method, samples, iterations, simulations, symmetry, plot):
 
 
         # Error band for the area_estimate
-        ci_min = area_estimate - (1.96*np.sqrt(area_estimate_std)/np.sqrt(simulations))
-        ci_max = area_estimate + (1.96*np.sqrt(area_estimate_std)/np.sqrt(simulations))
+        ci_min = area_estimate - (1.96*np.sqrt(area_estimate_std)/np.sqrt(simulation_number_area_estimate))
+        ci_max = area_estimate + (1.96*np.sqrt(area_estimate_std)/np.sqrt(simulation_number_area_estimate))
 
         plt.figure(1)
         plt.axhline(y = area_estimate, color = 'r', linestyle = ':', label = "$A_{i,s}$") 
