@@ -3,7 +3,6 @@
 # Maybe we can add CLA's to run random/hypercube/orthogonal sampling etc.? 
 
 import argparse
-import random
 import matplotlib.pyplot as plt
 import numpy as np
 from libraries.methods import Mandelbrot
