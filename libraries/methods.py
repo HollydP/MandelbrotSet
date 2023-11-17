@@ -4,6 +4,7 @@ import pandas as pd
 import os
 
 from libraries.sampling_methods import pure_random_sampling, latin_hypercube_sampling, orthogonal_sampling
+from libraries.strata import StrataCollection
 
 class Mandelbrot:
     """
@@ -75,15 +76,35 @@ class Mandelbrot:
 
         return np.mean(areas_found), areas_found
     
-    def save_to_csv(self, areas_found, simulations):
+    def save_to_csv(self, areas_found, simulations, title=None):
         """
         Saves the area estimations to csv file.
         """
         areas_df = pd.DataFrame(areas_found, columns=["Area"])
-        areas_df.to_csv(
-            os.path.join("data",f"Mandlebrot Area Simulations for {self.method} n{self.samples} s{simulations} i{self.max_iters}.csv"), 
+        if title:
+            areas_df.to_csv(
+            os.path.join("data",f"{title}.csv"), 
                 index=False
             )
+        else:
+            areas_df.to_csv(
+                os.path.join("data",f"Mandlebrot Area Simulations for {self.method} n{self.samples} s{simulations} i{self.max_iters}.csv"), 
+                    index=False
+                )
+    
+    def stratified_estimation(self, simulations, save=True):
+        """Estimates area by distributing samples across strata of differing importance."""
+        Stratas = StrataCollection()
+        areas = []
+        for _ in range(simulations):
+            areas.append(Stratas.estimate_area(self.samples, self.sampling_function, self.max_iters))
+        
+        if save:
+            self.save_to_csv(
+                areas,
+                simulations,
+                title=f"stratified for {self.method}_n{self.samples}_i{self.max_iters}_s{simulations}")
+        return np.mean(areas), areas
 
 # class Sampling:
 #     """
