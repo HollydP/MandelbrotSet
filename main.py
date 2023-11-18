@@ -6,6 +6,8 @@ import argparse
 import random
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import os
 from libraries.methods import Mandelbrot
 
 def main(method, samples, iterations, simulations, symmetry, plot):
@@ -41,11 +43,7 @@ def main(method, samples, iterations, simulations, symmetry, plot):
             samples_matrix = Mandelbrot_Functions.simulate(simulations)[2]
 
             k = 2
-            x = [10]
-            while k <= np.log10(iterations):
-                x.append(int((10**k)/2))
-                x.append(10**k)
-                k += 1
+            x = list(range(100,iterations,250))
 
             area_values = []
             error_bars = []
@@ -57,6 +55,9 @@ def main(method, samples, iterations, simulations, symmetry, plot):
                 # Areas are computed for each samples sets (there are a simulations amount of samples sets)
                 for j in range(0, len(samples_matrix)):
                     area_sample_vector.append(Mandelbrot_Functions.estimate_area(samples_matrix[j]))
+                areas_df = pd.DataFrame(area_sample_vector, columns=["Area"])
+                areas_df.to_csv(os.path.join("data","Mandlebrot Area Simulations for {} n{} s{} i{}.csv".format(method,samples,j+1,i)), 
+                index=False)
                 area_sample = np.mean(area_sample_vector) # We obtain A_{i,s}.
                 print(f'Mean area for current simulation: {area_sample} ')
                 area_values.append(area_sample)
