@@ -12,11 +12,11 @@ def main(method, samples, iterations, simulations, symmetry, plot, stratified):
     # Variance Reduction Technique - Reducing the area - Utilizes the fact the Mandlebrot is symmetric about the x axis
     # For the same number of simulations we should see a better convergence
     if symmetry == True:
-        x_min, x_max = (-2, 1)
-        y_min, y_max = (0, 1)
+        x_min, x_max = (-2, 0.6)
+        y_min, y_max = (0, 1.2)
     else:
-        x_min, x_max = (-2, 1)
-        y_min, y_max = (-1, 1)
+        x_min, x_max = (-2, 0.6)
+        y_min, y_max = (-1.2, 1.2)
 
     Mandelbrot_Functions = Mandelbrot(method, samples, iterations, x_min, x_max, y_min, y_max)
 
