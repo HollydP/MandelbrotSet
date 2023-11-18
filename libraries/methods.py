@@ -60,13 +60,15 @@ class Mandelbrot:
         points_in_set = np.sum(boolean_arr)
         return self.total_area * points_in_set / len(point_set)
     
-    def simulate(self, simulations, save=True) -> float:
+    def simulate(self, simulations, save=True, return_samples = False) -> float:
         """
         Returns mean area after N iterations.
         """
         areas_found = []
+        samples_matrix = []
         for _ in range(simulations):
             samples_drawn = self.sampling_function(self.x_range, self.y_range, self.samples)
+            samples_matrix.append(samples_drawn)
             estimated_area = self.estimate_area(samples_drawn)
             areas_found.append(estimated_area)
 
@@ -74,7 +76,10 @@ class Mandelbrot:
         if save:
             self.save_to_csv(areas_found, simulations)
 
-        return np.mean(areas_found), areas_found
+        if return_samples == False:
+            return np.mean(areas_found), areas_found
+        else:
+            return np.mean(areas_found), areas_found,samples_matrix
     
     def save_to_csv(self, areas_found, simulations, title=None):
         """
