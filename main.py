@@ -52,4 +52,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # run main with provided arguments
-    main(args.method, args.n, args.iterations, args.simulations, args.symmetry, args.stratified)
+    main(args.method, args.n, args.iterations, args.simulations, args.symmetry, args.stratified, args.save)
