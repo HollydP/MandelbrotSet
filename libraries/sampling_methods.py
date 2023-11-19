@@ -5,8 +5,11 @@ import random
 def pure_random_sampling(x_range, y_range, samples) -> ndarray[complex]:
     """
     Generates a list of complex numbers via pure random sampling.
+    x_range (tuple) - (x_min, x_max) values of grid
+    y_range (tuple) - (y_min, y_max) values of grid
+    samples (int)   - number of samples to draw
     """
-    # Generate Random x and y-coords
+    # generate random x and y-coords
     x_samples = np.random.uniform(x_range[0], x_range[1], samples)
     y_samples = np.random.uniform(y_range[0], y_range[1], samples)
     paired_points = list(zip(x_samples, y_samples))
@@ -46,20 +49,20 @@ def orthogonal_sampling(x_range, y_range, samples) -> ndarray[complex]:
     - Make sure no cells share a common row or column with the cells selected in other subgrids.
     - Randomly select location within cell
     """
-    # Size of cell
+    # size of cell
     x_min, x_max = x_range
     y_min, y_max = y_range
     dx = (x_max-x_min)/(samples-1) # width
     dy = (y_max-y_min)/(samples-1) # height
 
-    # Create subgrids by index
+    # create subgrids by index
     subspaces = int(np.sqrt(samples))
 
-    # Initilize list of selected points
+    # initilize list of selected points
     selected_x=[]
     selected_y=[]
 
-    # Loop through each subgrid and randomly choose a location from the remaining cells and columns
+    # loop through each subgrid and randomly choose a location from the remaining cells and columns
     for i in range(subspaces):
         for j in range(subspaces):
 
