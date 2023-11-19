@@ -33,7 +33,7 @@ The area of the Mandelbrot set is approached via three different sampling method
 
 1. Clone the repository:
 ```bash
-git clone [https://github.com/HollydP/MandelbrotSet](https://github.com/HollydP/MandelbrotSet)
+git clone https://github.com/HollydP/MandelbrotSet.git
 ```
 2. Navigate to the project root directory.
 ```
