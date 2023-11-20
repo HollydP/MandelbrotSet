@@ -64,9 +64,9 @@ python3 main.py method [--help] [-n N_samples] [-i ITERATIONS] [-s SIMULATIONS] 
 
 `-s` number of simulations to run (default is 10).
 
-`--symmetry` use symmetry in the x-axis when estimating the area.
+`--symmetry` to exploit symmetry in the x-axis when estimating the area.
 
-`--stratified` use stratified sampling (to reduce variance)
+`--stratified` to enable stratified sampling (to reduce variance)
 
 `--save` saves results in a csv-file in `./data/`.
 
@@ -83,7 +83,7 @@ Area found using random sampling: 1.4918592
 Variance: 0.0018081583103999972
 ```
 
-Running and saving 50 simulations of stratified hypercube samplin with 4096 samples and iteration limit of 1000:
+Running and saving 50 simulations of stratified hypercube sampling with 4096 samples and iteration limit of 1000:
 ```bash
 python3 main.py hypercube -n 4096 -i 1000 -s 10 --save
 ```
