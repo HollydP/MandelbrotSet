@@ -11,7 +11,6 @@ Holly - 15055108, Nina - 12896934, Raphael - 14805367
 * [Project Structure](#project-structure)
 * [Installation](#installation)
 * [Usage](#usage)
-* [Project Summary](#project-summary)
 * [Licensing](#license)
 * [Acknowledgements](#acknowledgements)
 
@@ -27,7 +26,7 @@ The area of the Mandelbrot set is approached via three different sampling method
     - `./sampling_methods.py` - All the sampling functions for orthogonal, hypercube and random sampling. Used in `methods.py`
     - `./libraries/strata.py` - Static classes used for stratified sampling.
 * `/data/*`   - All saved simulation data in csv files.
-* `/images/*` - Contains all plots and images generated and used in the report.
+* `/images/*` - Contains all plots and images generated and saved for the report.
 * `/notebooks/*` - Notebooks with data analysis and plots of simulation results
 * `main.py`      - Used to run simulations via the CLI
 * `requirements.txt` - Lists the required Python packages and their versions.
@@ -97,6 +96,5 @@ This project is licensed under the [MIT License](LICENSE.md) - see the [LICENSE.
 
 ## Acknowledgements
 
-Code for the Mandlebrot visuals and Julia set images were adapted from [this report](https://medium.com/swlh/visualizing-the-mandelbrot-set-using-python-50-lines-f6aa5a05cf0f)
-This code was accessed via its public repository on github: [Mandelbrot-Set](https://github.com/blakesanie/Mandelbrot-Set) 
-- Author: Blake Sanie (2020)
+Code for the Mandlebrot visuals and Julia set images were adapted from [this report](https://medium.com/swlh/visualizing-the-mandelbrot-set-using-python-50-lines-f6aa5a05cf0f).
+This code was accessed via its public repository on github: [Mandelbrot-Set](https://github.com/blakesanie/Mandelbrot-Set)
