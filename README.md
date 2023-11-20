@@ -2,7 +2,10 @@
 ### Stochastic Simulations - Assignment 1
 ![Image](images/Mandelbrot%20zoom.png)
 
-Holly - 15055108, Nina - 12896934, Raphael - 14805367
+### Contributors
+* Holly - 15055108
+* Nina - 12896934
+* Raphael - 14805367
 
 
 ## Table of Contents
