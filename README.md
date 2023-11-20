@@ -80,3 +80,9 @@ Summary of the results found?
 
 
 ## Acknowledgements
+
+The mandlebrot visuals and julia set images were inspired by the report 
+https://medium.com/swlh/visualizing-the-mandelbrot-set-using-python-50-lines-f6aa5a05cf0f
+This code was accessed via the public repository on github 
+https://github.com/blakesanie/Mandelbrot-Set
+- Author: Blake Sanie (2020)
